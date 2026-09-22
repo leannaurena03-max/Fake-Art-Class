@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A.I. FOR DESIGNERS — Leanna Urena</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f1e7;
+  --card:#fffaf3;
+  --text:#5c4b43;
+  --accent:#c8d5b9;
+  --accent2:#e7cdbf;
+  --accent3:#ddd6f3;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Baloo 2',cursive;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  padding:2rem;
+}
+.container{
+  max-width:850px;
+  margin:auto;
+  background:var(--card);
+  padding:2rem;
+  border-radius:28px;
+  box-shadow:0 10px 30px rgba(0,0,0,.08);
+  position:relative;
+}
+h1{
+  font-size:clamp(2rem,5vw,4rem);
+  line-height:1;
+  margin-bottom:.5rem;
+}
+.subtitle,.email{
+  font-size:1.2rem;
+  margin-bottom:.5rem;
+}
+.email a{
+  color:inherit;
+}
+.work-title{
+  margin:2rem 0 1rem;
+  font-size:1.6rem;
+}
+ol{list-style:none}
+li a{
+  display:flex;
+  gap:1rem;
+  text-decoration:none;
+  color:var(--text);
+  padding:1rem;
+  margin-bottom:.75rem;
+  border-radius:18px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  transition:.2s;
+}
+li a:hover{transform:translateY(-3px) rotate(-.4deg)}
+.num{min-width:40px;font-weight:700}
+.doodle{
+  position:absolute;
+  font-size:2rem;
+  opacity:.8;
+}
+.d1{top:20px;right:25px}
+.d2{bottom:25px;left:20px}
+.d3{top:140px;right:70px}
+@media(max-width:600px){
+ body{padding:1rem}
+ .container{padding:1.25rem}
+}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="doodle d1">🌼</div>
+<div class="doodle d2">🪱</div>
+<div class="doodle d3">☁️</div>
+<h1>A.I. FOR DESIGNERS — Leanna Urena</h1>
+<div class="subtitle">ART 3041 · Fall 2026</div>
+<div class="email"><a href="mailto:leannaurena03@gmail.com">leannaurena03@gmail.com</a></div>
+
+<h2 class="work-title">Work</h2>
+<ol>
+<li><a href="#"><span class="num">01</span><span>Custom Instructions</span></a></li>
+<li><a href="#"><span class="num">02</span><span>A Style Guide for Your AI</span></a></li>
+<li><a href="#"><span class="num">03</span><span>Design a ___</span></a></li>
+<li><a href="#"><span class="num">04</span><span>Commute Story</span></a></li>
+<li><a href="#"><span class="num">05</span><span>Become a Crea(i)tive Director</span></a></li>
+<li><a href="#"><span class="num">06</span><span>Experimental AI Interface</span></a></li>
+<li><a href="#"><span class="num">07</span><span>Open</span></a></li>
+</ol>
+</div>
+</body>
+</html>
