@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A.I. FOR DESIGNERS — Leanna Urena</title>
+<style>
+:root { --background:#FFFFFF; --text:#111111; --accent:#2E9B4F; }
+* { box-sizing:border-box; }
+body { margin:0; padding:32px 16px; background:var(--background); color:var(--text); font:400 16px/1.5 Arial,Helvetica,sans-serif; isolation:isolate; }
+.container { position:relative; z-index:1; max-width:1200px; margin:0 auto; }
+h1,h2 { font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; font-weight:700; line-height:1.25; }
+h1 { margin:0 0 24px; font-size:22px; }
+h2 { margin:0 0 24px; font-size:18px; }
+.hero { width:100%; display:block; aspect-ratio:4 / 3; object-fit:cover; object-position:48% center; border-radius:0; }
+.course, .work { margin-top:32px; }
+p { margin:0; }
+.email { margin-top:8px; overflow-wrap:anywhere; }
+a { color:var(--accent); text-decoration:none; }
+a:hover, a:focus-visible, button:hover, button:focus-visible { text-decoration:underline; text-decoration-thickness:2px; text-underline-offset:4px; }
+a:focus-visible, button:focus-visible { outline:2px solid var(--text); outline-offset:3px; }
+.work-list { display:grid; grid-template-columns:minmax(0,1fr); gap:16px; list-style:none; padding:0; margin:0; }
+.work-list li { min-width:0; }
+.work-list a { display:flex; align-items:center; gap:16px; width:100%; height:100%; min-height:56px; padding:16px 20px; background:var(--accent); color:var(--text); border:1px solid var(--accent); border-radius:0; font-size:16px; font-weight:700; text-align:left; overflow-wrap:anywhere; }
+.num { flex:0 0 24px; }
+.animation-control { margin-top:32px; padding:8px 12px; min-height:44px; border:1px solid var(--accent); border-radius:0; color:var(--text); background:var(--background); font:400 14px/1.5 Arial,Helvetica,sans-serif; cursor:pointer; }
+.animation-control:disabled { cursor:default; text-decoration:none; }
+[hidden] { display:none !important; }
+.background { position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
+.shape { position:absolute; left:var(--x); bottom:-70px; width:var(--size); height:var(--size); background:var(--accent); opacity:var(--opacity); animation:float-up var(--duration) linear infinite; animation-delay:var(--delay); }
+.shape:nth-child(odd) { border-radius:50%; }
+.shape:nth-child(n+7) { display:none; }
+@keyframes float-up { from { transform:translateY(0); } to { transform:translateY(calc(-100vh - 140px)); } }
+body.animation-paused .shape { animation-play-state:paused; }
+@media (min-width:640px) {
+ body { padding:32px 24px 48px; }
+ h1 { font-size:24px; }
+ .hero { aspect-ratio:16 / 7; object-position:center; }
+ .course,.work { margin-top:48px; }
+ .work-list { grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px; }
+ .shape:nth-child(-n+8) { display:block; }
+}
+@media (min-width:1024px) {
+ body { padding-right:32px; padding-left:32px; }
+ .work-list { grid-template-columns:repeat(3,minmax(0,1fr)); }
+ .shape:nth-child(n) { display:block; }
+}
+@media (prefers-reduced-motion:reduce) {
+ .shape { animation:none; bottom:var(--rest); transform:none; }
+}
+</style>
+</head>
+<body>
+<div class="background" aria-hidden="true">
+<span class="shape" style="--x:3%;--size:32px;--opacity:.08;--duration:4s;--delay:-1s;--rest:12%"></span>
+<span class="shape" style="--x:20%;--size:48px;--opacity:.10;--duration:5s;--delay:-3s;--rest:45%"></span>
+<span class="shape" style="--x:37%;--size:24px;--opacity:.12;--duration:4.5s;--delay:-2s;--rest:70%"></span>
+<span class="shape" style="--x:54%;--size:64px;--opacity:.06;--duration:6s;--delay:-5s;--rest:28%"></span>
+<span class="shape" style="--x:72%;--size:40px;--opacity:.09;--duration:5.5s;--delay:-4s;--rest:85%"></span>
+<span class="shape" style="--x:90%;--size:20px;--opacity:.12;--duration:4s;--delay:-2.5s;--rest:55%"></span>
+<span class="shape" style="--x:12%;--size:56px;--opacity:.07;--duration:5s;--delay:-.5s;--rest:80%"></span>
+<span class="shape" style="--x:81%;--size:28px;--opacity:.11;--duration:4.5s;--delay:-3.5s;--rest:18%"></span>
+<span class="shape" style="--x:28%;--size:44px;--opacity:.08;--duration:6s;--delay:-1.5s;--rest:35%"></span>
+<span class="shape" style="--x:46%;--size:36px;--opacity:.10;--duration:5.5s;--delay:-4.5s;--rest:62%"></span>
+<span class="shape" style="--x:64%;--size:60px;--opacity:.06;--duration:5s;--delay:-2.8s;--rest:8%"></span>
+<span class="shape" style="--x:95%;--size:24px;--opacity:.12;--duration:4s;--delay:-.8s;--rest:92%"></span>
+</div>
+<main class="container">
+<header>
+<h1>Leanna Urena</h1>
+<!-- Keep hero.png in the same folder as index.html. -->
+<img class="hero" src="hero.png" alt="A black tote with a laptop and green notebook, a coffee cup, and white sneakers beside a window overlooking a New York City train and skyline." width="1916" height="821" fetchpriority="high">
+<div class="course">
+<p>A.I. FOR DESIGNERS · ART 3041 · Fall 2026</p>
+<p class="email"><a href="mailto:leannaurena03@gmail.com">leannaurena03@gmail.com</a></p>
+</div>
+</header>
+<section class="work" aria-labelledby="work-heading">
+<h2 id="work-heading">Work</h2>
+<!-- Original assignment destinations preserved. Replace # as work is published. -->
+<ol class="work-list">
+<li><a href="#"><span class="num">01</span><span>Custom Instructions</span></a></li>
+<li><a href="#"><span class="num">02</span><span>A Style Guide for Your AI</span></a></li>
+<li><a href="#"><span class="num">03</span><span>Design a ___</span></a></li>
+<li><a href="#"><span class="num">04</span><span>Commute Story</span></a></li>
+<li><a href="#"><span class="num">05</span><span>Become a Crea(i)tive Director</span></a></li>
+<li><a href="#"><span class="num">06</span><span>Experimental AI Interface</span></a></li>
+<li><a href="#"><span class="num">07</span><span>Open</span></a></li>
+</ol>
+</section>
+<button class="animation-control" id="animation-control" type="button" hidden>Pause animation</button>
+</main>
+<script>
+(() => {
+ const control = document.getElementById('animation-control');
+ const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+ let paused = false;
+ function update() {
+  document.body.classList.toggle('animation-paused', paused || reducedMotion.matches);
+  control.disabled = reducedMotion.matches;
+  control.textContent = reducedMotion.matches ? 'Animation off: reduced motion' : paused ? 'Resume animation' : 'Pause animation';
+ }
+ control.hidden = false;
+ control.addEventListener('click', () => { paused = !paused; update(); });
+ reducedMotion.addEventListener('change', update);
+ update();
+})();
+</script>
+</body>
+</html>
