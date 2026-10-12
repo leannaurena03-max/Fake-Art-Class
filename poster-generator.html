@@ -1,660 +1,333 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WITNESS NYC — Generative Poster Studio</title>
-  
-  <!-- Fallback Google Fonts for testing in browser if local files are loading -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=League+Gothic&family=Oswald:wght@700&display=swap" rel="stylesheet">
-
-  <style>
-    /* Local font declarations matching skills.md relative paths */
-    @font-face {
-      font-family: 'Anton';
-      src: url('fonts/Anton-Regular.ttf') format('truetype');
-      font-weight: normal;
-      font-style: normal;
-    }
-    @font-face {
-      font-family: 'Oswald';
-      src: url('fonts/Oswald-VariableFont_wght.ttf') format('truetype-variations'),
-           url('fonts/Oswald-VariableFont_wght.ttf') format('truetype');
-      font-weight: 200 900;
-      font-style: normal;
-    }
-    @font-face {
-      font-family: 'Bebas Neue';
-      src: url('fonts/BebasNeue-Regular.ttf') format('truetype');
-      font-weight: normal;
-      font-style: normal;
-    }
-    @font-face {
-      font-family: 'League Gothic';
-      src: url('fonts/LeagueGothic-Regular-VariableFont_wdth.ttf') format('truetype-variations'),
-           url('fonts/LeagueGothic-Regular-VariableFont_wdth.ttf') format('truetype');
-      font-weight: normal;
-      font-style: normal;
-    }
-
-    :root {
-      --bg-workspace: #161618;
-      --panel-bg: #212124;
-      --panel-border: #333336;
-      --text-main: #f0f0f2;
-      --text-muted: #9c9ca4;
-      --accent: #f1dc45;
-      --accent-hover: #fae868;
-      --radius: 6px;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background-color: var(--bg-workspace);
-      color: var(--text-main);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    header {
-      padding: 16px 28px;
-      border-bottom: 1px solid var(--panel-border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: #1a1a1c;
-    }
-
-    header h1 {
-      font-size: 1.15rem;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    header h1 span {
-      background: var(--accent);
-      color: #111;
-      padding: 2px 7px;
-      border-radius: 4px;
-      font-size: 0.8rem;
-      font-weight: 800;
-    }
-
-    .app-layout {
-      flex: 1;
-      display: grid;
-      grid-template-columns: 380px 1fr;
-      min-height: calc(100vh - 65px);
-    }
-
-    /* Left Control Sidebar */
-    .sidebar {
-      background-color: var(--panel-bg);
-      border-right: 1px solid var(--panel-border);
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      overflow-y: auto;
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    label {
-      font-size: 0.8rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      color: var(--text-muted);
-    }
-
-    input[type="text"],
-    select {
-      background: #151517;
-      border: 1px solid var(--panel-border);
-      color: var(--text-main);
-      padding: 10px 12px;
-      border-radius: var(--radius);
-      font-size: 0.95rem;
-      outline: none;
-      transition: border-color 0.15s ease;
-    }
-
-    input[type="text"]:focus,
-    select:focus {
-      border-color: var(--accent);
-    }
-
-    .color-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    .color-field {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: #151517;
-      border: 1px solid var(--panel-border);
-      padding: 6px 10px;
-      border-radius: var(--radius);
-    }
-
-    .color-field input[type="color"] {
-      -webkit-appearance: none;
-      border: none;
-      width: 28px;
-      height: 28px;
-      border-radius: 4px;
-      cursor: pointer;
-      background: none;
-    }
-
-    .color-field input[type="color"]::-webkit-color-swatch-wrapper {
-      padding: 0;
-    }
-
-    .color-field input[type="color"]::-webkit-color-swatch {
-      border: 1px solid #444;
-      border-radius: 4px;
-    }
-
-    .color-field span {
-      font-size: 0.82rem;
-      color: var(--text-main);
-    }
-
-    .toggle-group {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      padding: 12px 14px;
-      background: #17171a;
-      border: 1px solid var(--panel-border);
-      border-radius: var(--radius);
-    }
-
-    .toggle-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      cursor: pointer;
-      user-select: none;
-    }
-
-    .toggle-row span {
-      font-size: 0.86rem;
-      color: var(--text-main);
-    }
-
-    .toggle-row input[type="checkbox"] {
-      accent-color: var(--accent);
-      width: 17px;
-      height: 17px;
-      cursor: pointer;
-    }
-
-    button#generate-btn {
-      margin-top: 8px;
-      background-color: var(--accent);
-      color: #111111;
-      border: none;
-      padding: 14px 16px;
-      border-radius: var(--radius);
-      font-size: 1rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      transition: background-color 0.15s ease, transform 0.05s ease;
-    }
-
-    button#generate-btn:hover {
-      background-color: var(--accent-hover);
-    }
-
-    button#generate-btn:active {
-      transform: scale(0.99);
-    }
-
-    /* Right Preview Stage */
-    .preview-stage {
-      padding: 32px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: radial-gradient(circle at center, #26262a 0%, #131315 100%);
-      overflow: hidden;
-    }
-
-    .poster-container {
-      width: 100%;
-      max-width: 580px;
-      height: auto;
-      max-height: 80vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65), 0 2px 10px rgba(0, 0, 0, 0.4);
-      border-radius: 4px;
-      overflow: hidden;
-      background: #111;
-      aspect-ratio: 5 / 7;
-    }
-
-    .poster-container svg {
-      width: 100%;
-      height: 100%;
-      display: block;
-    }
-
-    .download-wrapper {
-      margin-top: 22px;
-    }
-
-    button#download-btn {
-      background-color: #2b2b30;
-      color: var(--text-main);
-      border: 1px solid var(--panel-border);
-      padding: 12px 28px;
-      border-radius: var(--radius);
-      font-size: 0.95rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      transition: background-color 0.15s ease, border-color 0.15s ease;
-    }
-
-    button#download-btn:hover {
-      background-color: #38383f;
-      border-color: #555;
-    }
-
-    button#download-btn svg {
-      width: 18px;
-      height: 18px;
-      fill: currentColor;
-    }
-
-    @media (max-width: 900px) {
-      .app-layout {
-        grid-template-columns: 1fr;
-      }
-      .sidebar {
-        border-right: none;
-        border-bottom: 1px solid var(--panel-border);
-      }
-      .preview-stage {
-        padding: 24px 16px;
-      }
-      .poster-container {
-        max-width: 92vw;
-      }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WITNESS — Poster Generator</title>
+<style>
+@font-face{font-family:Anton;src:url('fonts/Anton-Regular.ttf') format('truetype');font-weight:400;font-style:normal;font-display:block}
+@font-face{font-family:Oswald;src:url('fonts/Oswald-VariableFont_wght.ttf') format('truetype');font-weight:200 700;font-style:normal;font-display:block}
+@font-face{font-family:'Bebas Neue';src:url('fonts/BebasNeue-Regular.ttf') format('truetype');font-weight:400;font-style:normal;font-display:block}
+@font-face{font-family:'League Gothic';src:url('fonts/LeagueGothic-Regular-VariableFont_wdth.ttf') format('truetype');font-weight:400;font-style:normal;font-display:block}
+:root{color-scheme:dark;--bg:#181a19;--panel:#222522;--line:#3d423d;--muted:#b5bcb3;--text:#f5f1e7;--yellow:#f1dc45}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}button,input,select{font:inherit}button,select,input[type=color],input[type=checkbox]{cursor:pointer}button:disabled{cursor:wait;opacity:.5}button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid var(--yellow);outline-offset:4px}
+header{padding:22px 32px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:20px}header h1{margin:0;font-size:21px;letter-spacing:-.04em}header h1 span{color:var(--yellow)}.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}header p{margin:0;color:var(--muted);font-size:12px}
+main{display:grid;grid-template-columns:340px minmax(0,1fr);min-height:calc(100vh - 82px)}aside{padding:28px 26px;background:var(--panel);border-right:1px solid var(--line)}.intro{margin:0 0 22px;color:var(--muted);font-size:13px}.field{display:grid;gap:7px;margin-bottom:17px}.field>label,legend{font-size:12px;font-weight:650}input[type=text],select{width:100%;min-height:43px;padding:10px 12px;background:#181b18;border:1px solid #50564e;border-radius:4px;color:var(--text)}.colors{display:grid;grid-template-columns:1fr 1fr;gap:12px}.colorbox{display:flex;align-items:center;gap:9px;border:1px solid #50564e;background:#181b18;padding:7px;border-radius:4px}.colorbox input{padding:0;width:34px;height:28px;background:none;border:none}.colorbox output{font-size:11px;font-family:ui-monospace,monospace}.hint{margin:5px 0 0;font-size:11px;color:var(--muted)}fieldset{margin:4px 0 20px;padding:12px 14px;border:1px solid var(--line);border-radius:4px}fieldset label{display:flex;justify-content:space-between;align-items:center;min-height:35px;font-size:13px}input[type=checkbox]{width:17px;height:17px;accent-color:var(--yellow)}
+#generate{width:100%;padding:14px 16px;background:var(--yellow);color:#111;border:0;border-radius:4px;font-weight:750}#generate:hover:enabled{background:#ffe969}.status{margin:15px 0 0;font-size:12px;color:var(--muted);min-height:38px}.status.error{color:#ffb1a2}details{border-top:1px solid var(--line);margin-top:20px;padding-top:14px;font-size:12px;color:var(--muted)}summary{cursor:pointer;color:var(--text)}details code{overflow-wrap:anywhere}details ul{padding-left:18px}details p{margin:10px 0}
+.stage{padding:28px 40px 30px;display:flex;flex-direction:column;align-items:center;gap:16px;min-width:0;background:#191c1a}.preview-heading{display:flex;justify-content:space-between;align-items:center;width:100%;max-width:560px;gap:10px}.preview-heading h2{font-size:12px;font-weight:500;margin:0;color:var(--muted)}#edition{font:11px ui-monospace,monospace;color:var(--muted)}.paper{width:min(100%,560px);aspect-ratio:5/7;background:#252925;box-shadow:0 14px 55px #0008;position:relative}.paper>svg{width:100%;height:100%;display:block}.empty{position:absolute;inset:0;display:grid;place-items:center;padding:28px;text-align:center;color:var(--muted)}.preview-footer{width:100%;max-width:560px;display:flex;flex-direction:column;align-items:center;gap:10px}#download{background:transparent;border:1px solid #697162;color:var(--text);border-radius:4px;padding:11px 26px;font-weight:600}#download:hover:enabled{border-color:var(--yellow);color:var(--yellow)}#result-note{margin:0;text-align:center;font-size:11px;color:var(--muted)}.measure-host{position:fixed;left:-12000px;top:0;width:1000px;height:1400px;visibility:hidden;pointer-events:none}
+@media(min-width:1100px){.paper{width:min(560px,calc((100vh - 255px)*5/7))}.preview-heading,.preview-footer{max-width:560px}}@media(max-width:760px){header{padding:18px 20px}header p{display:none}main{grid-template-columns:1fr}aside{border-right:0;border-bottom:1px solid var(--line);padding:24px 20px}.stage{padding:24px 20px}.paper{max-width:500px}}@media(prefers-reduced-motion:no-preference){button{transition:background .15s,border-color .15s}}
+</style>
 </head>
 <body>
-
-  <header>
-    <h1>WITNESS NYC <span>STUDIO</span></h1>
-    <div style="font-size: 0.85rem; color: var(--text-muted);">Procedural Design System (5:7 Ratio)</div>
-  </header>
-
-  <main class="app-layout">
-    <!-- Controls (Left) -->
-    <aside class="sidebar">
-      <div class="form-group">
-        <label for="title-input">Title / Headline</label>
-        <input type="text" id="title-input" value="WITNESS" placeholder="Enter headline">
-      </div>
-
-      <div class="form-group">
-        <label for="location-input">Location / Subhead</label>
-        <input type="text" id="location-input" value="NYC" placeholder="Enter location">
-      </div>
-
-      <div class="form-group">
-        <label for="date-input">Date / Supporting Info</label>
-        <input type="text" id="date-input" value="02 04 09" placeholder="Enter date or details">
-      </div>
-
-      <div class="form-group">
-        <label for="font-select">Typography</label>
-        <select id="font-select">
-          <option value="Anton">Anton (Regular)</option>
-          <option value="Oswald">Oswald (Bold 700)</option>
-          <option value="Bebas Neue">Bebas Neue (Regular)</option>
-          <option value="League Gothic">League Gothic (Regular)</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label for="layout-select">Layout Composition</label>
-        <select id="layout-select">
-          <option value="auto">Automatic (Random Variation)</option>
-          <option value="split_turn">Split & Turn (Witness Signature)</option>
-          <option value="stacked">Stacked Impact</option>
-          <option value="monument">Single-Word Monument</option>
-          <option value="offset">Offset Columns</option>
-          <option value="repetition">Rhythmic Repetition</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label for="palette-select">Color Preset</label>
-        <select id="palette-select">
-          <option value="witness">WITNESS (Yellow & Black)</option>
-          <option value="inverted">Inverted (Black & Off-White)</option>
-          <option value="poster-red">Editorial (Warm Cream & Crimson)</option>
-          <option value="concrete">Brutalist (Concrete Grey & Black)</option>
-          <option value="custom">Custom Colors</option>
-        </select>
-      </div>
-
-      <div class="color-grid" id="custom-color-controls">
-        <div class="color-field">
-          <input type="color" id="bg-color-picker" value="#F1DC45">
-          <span>Background</span>
-        </div>
-        <div class="color-field">
-          <input type="color" id="ink-color-picker" value="#111111">
-          <span>Ink Color</span>
-        </div>
-      </div>
-
-      <div class="toggle-group">
-        <label class="toggle-row">
-          <span>Rotated Lettering</span>
-          <input type="checkbox" id="toggle-rotation" checked>
-        </label>
-        <label class="toggle-row">
-          <span>Structural Bars</span>
-          <input type="checkbox" id="toggle-bars" checked>
-        </label>
-        <label class="toggle-row">
-          <span>Paper Texture & Fold Marks</span>
-          <input type="checkbox" id="toggle-texture">
-        </label>
-      </div>
-
-      <button type="button" id="generate-btn">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
-        </svg>
-        Generate Poster
-      </button>
-    </aside>
-
-    <!-- Poster Preview (Right) -->
-    <section class="preview-stage">
-      <div class="poster-container" id="poster-container">
-        <!-- SVG injected dynamically -->
-      </div>
-
-      <div class="download-wrapper">
-        <button type="button" id="download-btn">
-          <svg viewBox="0 0 24 24">
-            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
-          </svg>
-          Download Editable SVG
-        </button>
-      </div>
-    </section>
-  </main>
-
-  <script>
-    // System Constants based on skills.md
-    const CANVAS_W = 1000;
-    const CANVAS_H = 1400;
-    const U = 10; // 1u = 10 units
-    const MARGIN = 40; // 4u margin
-    const USABLE_W = CANVAS_W - (MARGIN * 2); // 920 units
-    const USABLE_H = CANVAS_H - (MARGIN * 2); // 1320 units
-    const GUTTER = 20; // 2u gutter
-    const COL_W = (USABLE_W - (5 * GUTTER)) / 6; // ~136.67 units
-
-    // State management
-    let currentSeed = Math.floor(Math.random() * 100000);
-
-    const PALETTES = {
-      witness: { bg: '#F1DC45', ink: '#111111', accent: '#F5F1E7' },
-      inverted: { bg: '#111111', ink: '#F5F1E7', accent: '#F1DC45' },
-      'poster-red': { bg: '#EFE9DD', ink: '#D7261E', accent: '#111111' },
-      concrete: { bg: '#CBCBC9', ink: '#121212', accent: '#FFFFFF' },
-    };
-
-    // UI Elements
-    const titleInput = document.getElementById('title-input');
-    const locationInput = document.getElementById('location-input');
-    const dateInput = document.getElementById('date-input');
-    const fontSelect = document.getElementById('font-select');
-    const layoutSelect = document.getElementById('layout-select');
-    const paletteSelect = document.getElementById('palette-select');
-    const bgColorPicker = document.getElementById('bg-color-picker');
-    const inkColorPicker = document.getElementById('ink-color-picker');
-    const toggleRotation = document.getElementById('toggle-rotation');
-    const toggleBars = document.getElementById('toggle-bars');
-    const toggleTexture = document.getElementById('toggle-texture');
-    const generateBtn = document.getElementById('generate-btn');
-    const downloadBtn = document.getElementById('download-btn');
-    const posterContainer = document.getElementById('poster-container');
-
-    // Pseudo-random number generator for reproducible generation per seed
-    function sfc32(a, b, c, d) {
-      return function() {
-        a |= 0; b |= 0; c |= 0; d |= 0;
-        let t = (a + b | 0) + d | 0;
-        d = d + 1 | 0;
-        a = b ^ b >>> 9;
-        b = c + (c << 3) | 0;
-        c = c << 21 | c >>> 11;
-        c = c + t | 0;
-        return (t >>> 0) / 4294967296;
-      };
-    }
-
-    function createRNG(seed) {
-      return sfc32(seed, seed ^ 0xDEADBEEF, seed ^ 0x41C64E6D, (seed >>> 16) ^ 0x1234567);
-    }
-
-    // Palette change listener
-    paletteSelect.addEventListener('change', () => {
-      const selected = paletteSelect.value;
-      if (selected !== 'custom') {
-        bgColorPicker.value = PALETTES[selected].bg;
-        inkColorPicker.value = PALETTES[selected].ink;
-      }
-      renderPoster();
+<header><h1>WITNESS<span> / </span>POSTER STUDIO</h1><p>Typography as the image. A new composition every time.</p></header>
+<main>
+<aside aria-label="Poster controls">
+<p class="eyebrow">01 / Make it yours</p>
+<p class="intro">Keep your words. Change their rhythm.</p>
+<form id="controls">
+<div class="field"><label for="title-input">Title</label><input id="title-input" type="text" value="WITNESS" required placeholder="Enter a title" autocomplete="off"></div>
+<div class="field"><label for="location-input">Location <span class="hint">(optional)</span></label><input id="location-input" type="text" value="NYC" placeholder="City, venue, or place" autocomplete="off"></div>
+<div class="field"><label for="date-input">Date <span class="hint">(optional)</span></label><input id="date-input" type="text" value="02.04.09" placeholder="Use any date format" autocomplete="off"></div>
+<div class="field"><label for="font-select">Font</label><select id="font-select"><option>Anton</option><option>Oswald</option><option>Bebas Neue</option><option>League Gothic</option></select></div>
+<div class="colors">
+<div class="field"><label for="background-color">Background</label><div class="colorbox"><input id="background-color" type="color" value="#f1dc45"><output id="background-value" for="background-color">#F1DC45</output></div></div>
+<div class="field"><label for="text-color">Text / bars</label><div class="colorbox"><input id="text-color" type="color" value="#111111"><output id="text-value" for="text-color">#111111</output></div></div>
+</div>
+<div class="field"><label for="layout-select">Layout</label><select id="layout-select"><option value="auto">Automatic</option><option value="stacked">Stacked impact</option><option value="offset">Offset columns</option><option value="monument">Single-word monument</option><option value="split">Split and turn</option><option value="repetition">Rhythmic repetition</option></select><p class="hint">Each layout keeps generating new arrangements.</p></div>
+<fieldset><legend>Finishing touches</legend><label for="rotation">Rotated lettering<input id="rotation" type="checkbox" checked></label><label for="bars">Bars<input id="bars" type="checkbox" checked></label><label for="texture">Paper texture<input id="texture" type="checkbox"></label></fieldset>
+<button id="generate" type="submit">Generate</button>
+</form>
+<p id="status" class="status" role="status" aria-live="polite">Loading your local font…</p>
+<details><summary>Fonts &amp; Illustrator</summary><p>Keep <code>poster-generator.html</code> beside a <code>fonts/</code> folder containing:</p><ul><li><code>Anton-Regular.ttf</code></li><li><code>Oswald-VariableFont_wght.ttf</code></li><li><code>BebasNeue-Regular.ttf</code></li><li><code>LeagueGothic-Regular-VariableFont_wdth.ttf</code></li></ul><p>Keep the fonts’ original licenses with them. Upload this page and the folder together to GitHub Pages. If opening directly from your computer blocks fonts, use GitHub Pages or a local web server.</p><p>For Illustrator, install the font selected for that poster: Anton Regular, Oswald (headline weight 700), Bebas Neue Regular, or League Gothic (default width). Installing all four lets you inspect every variation. Embedded browser fonts do not replace desktop installation in Illustrator.</p><p>Open the SVG in Illustrator and check that the Type tool edits the words and that rectangles remain separate vector shapes. This app does not outline or flatten the artwork.</p></details>
+</aside>
+<section class="stage" aria-label="Poster preview">
+<div class="preview-heading"><h2>02 / Poster preview</h2><span id="edition">1000 × 1400</span></div>
+<div id="preview" class="paper"><div class="empty">Your poster will appear here after the font loads.</div></div>
+<div class="preview-footer"><button id="download" type="button" disabled>Download SVG</button><p id="result-note">Editable text + vector shapes · 5:7 portrait</p></div>
+</section>
+</main>
+<div id="measurement" class="measure-host" aria-hidden="true"></div>
+<script>
+'use strict';
+(() => {
+  const NS = 'http://www.w3.org/2000/svg';
+  const XMLNS = 'http://www.w3.org/2000/xmlns/';
+  const W = 1000, H = 1400, M = 40, G = 20, CW = (920 - 5 * G) / 6;
+  const FONTS = {
+    'Anton': {file:'Anton-Regular.ttf',weight:400},
+    'Oswald': {file:'Oswald-VariableFont_wght.ttf',weight:700},
+    'Bebas Neue': {file:'BebasNeue-Regular.ttf',weight:400},
+    'League Gothic': {file:'LeagueGothic-Regular-VariableFont_wdth.ttf',weight:400}
+  };
+  const NAMES = {stacked:'Stacked impact',offset:'Offset columns',monument:'Single-word monument',split:'Split and turn',repetition:'Rhythmic repetition'};
+  const $ = id => document.getElementById(id);
+  const el = (name, attrs = {}, text) => {
+    const n = document.createElementNS(NS, name);
+    for (const [k,v] of Object.entries(attrs)) n.setAttribute(k, String(v));
+    if (text !== undefined) n.textContent = text;
+    return n;
+  };
+  function root() {
+    const n = el('svg', {width:W,height:H,viewBox:`0 0 ${W} ${H}`,version:'1.1'});
+    n.setAttributeNS(XMLNS, 'xmlns', NS);
+    return n;
+  }
+  const measuring = root();
+  $('measurement').append(measuring);
+  let last = null, busy = false, edition = 0, dirty = false;
+  const fontCache = new Map(), metrics = new Map();
+  const pick = (rng, a) => a[Math.floor(rng() * a.length)];
+  const col = n => M + n * (CW + G);
+  const span = n => n * CW + (n - 1) * G;
+  const rect = (x,y,w,h) => ({x,y,w,h});
+  const round = n => Math.round(n * 1000) / 1000;
+  const graphemes = text => typeof Intl.Segmenter === 'function' ? Array.from(new Intl.Segmenter(undefined,{granularity:'grapheme'}).segment(text),p=>p.segment) : Array.from(text);
+  function rngFrom(seed) {
+    let n = seed >>> 0;
+    return () => { n += 0x6D2B79F5; let t = Math.imul(n ^ n >>> 15, 1 | n); t ^= t + Math.imul(t ^ t >>> 7, 61 | t); return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+  }
+  function seed() { const a = new Uint32Array(1); if (window.crypto && crypto.getRandomValues) crypto.getRandomValues(a); else a[0] = Date.now() ^ Math.floor(Math.random()*4294967296); return a[0]; }
+  function message(text, error = false) { $('status').textContent = text; $('status').classList.toggle('error',error); }
+  function settings() {
+    return {title:$('title-input').value.trim(),location:$('location-input').value.trim(),date:$('date-input').value.trim(),font:$('font-select').value,bg:$('background-color').value,ink:$('text-color').value,layout:$('layout-select').value,rotation:$('rotation').checked,bars:$('bars').checked,texture:$('texture').checked};
+  }
+  function contrast(a,b) {
+    const lum = hex => {const c=[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16)/255).map(v=>v<=.04045?v/12.92:((v+.055)/1.055)**2.4); return c[0]*.2126+c[1]*.7152+c[2]*.0722;};
+    const x=lum(a),y=lum(b); return (Math.max(x,y)+.05)/(Math.min(x,y)+.05);
+  }
+  // Read the font's cmap so unsupported glyphs cannot silently use another family.
+  function glyphChecker(buffer) {
+    const v = new DataView(buffer), tables=v.getUint16(4); let base=0;
+    for(let i=0;i<tables;i++){const p=12+i*16; if(v.getUint32(p)===0x636d6170) base=v.getUint32(p+8);}
+    if(!base) throw new Error('No character map');
+    const maps=[];
+    for(let i=0;i<v.getUint16(base+2);i++){const p=base+4+i*8, platform=v.getUint16(p), encoding=v.getUint16(p+2), offset=base+v.getUint32(p+4), format=v.getUint16(offset); if(platform===0 || (platform===3&&(encoding===1||encoding===10))) if(format===4||format===12) maps.push({offset,format});}
+    maps.sort((a,b)=>b.format-a.format);
+    if(!maps.length) throw new Error('Unsupported character map');
+    return cp => maps.some(({offset:p,format}) => {
+      if(format===12){let lo=0,hi=v.getUint32(p+12)-1;while(lo<=hi){const m=(lo+hi)>>>1,q=p+16+m*12,start=v.getUint32(q),end=v.getUint32(q+4);if(cp<start)hi=m-1;else if(cp>end)lo=m+1;else return v.getUint32(q+8)+cp-start!==0;}return false;}
+      if(cp>65535)return false;const count=v.getUint16(p+6)/2,ends=p+14,starts=ends+count*2+2,deltas=starts+count*2,ranges=deltas+count*2;
+      for(let i=0;i<count;i++){const end=v.getUint16(ends+i*2);if(cp>end)continue;const start=v.getUint16(starts+i*2);if(cp<start)return false;const delta=v.getInt16(deltas+i*2),range=v.getUint16(ranges+i*2);if(!range)return ((cp+delta)&65535)!==0;const q=ranges+i*2+range+(cp-start)*2;if(q+2>v.byteLength)return false;const g=v.getUint16(q);return g!==0&&((g+delta)&65535)!==0;}return false;
     });
-
-    bgColorPicker.addEventListener('input', () => {
-      paletteSelect.value = 'custom';
-      renderPoster();
-    });
-
-    inkColorPicker.addEventListener('input', () => {
-      paletteSelect.value = 'custom';
-      renderPoster();
-    });
-
-    [titleInput, locationInput, dateInput, fontSelect, layoutSelect, toggleRotation, toggleBars, toggleTexture].forEach(el => {
-      el.addEventListener('change', () => renderPoster());
-    });
-
-    generateBtn.addEventListener('click', () => {
-      currentSeed = Math.floor(Math.random() * 1000000);
-      renderPoster();
-    });
-
-    // Font loading verification
-    async function ensureFontReady(fontName) {
+  }
+  async function fontReady(name, text) {
+    const spec=FONTS[name];
+    let faces;
+    try { faces=await document.fonts.load(`${spec.weight} 100px "${name}"`,text || 'WITNESS'); }
+    catch(e) { throw new Error(`Could not load ${name}. Keep fonts/${spec.file} alongside poster-generator.html, then open the page through GitHub Pages or a local web server.`); }
+    if(!faces.length||faces.some(f=>f.status!=='loaded')) throw new Error(`Could not load ${name}. Put fonts/${spec.file} beside this HTML page in the fonts folder.`);
+    await document.fonts.ready;
+    if(!fontCache.has(name)) {
+      const info={glyph:null,data:null};
       try {
-        const weight = fontName === 'Oswald' ? '700' : 'normal';
-        await document.fonts.load(`${weight} 60px "${fontName}"`);
-        await document.fonts.ready;
-      } catch (e) {
-        console.warn(`Font "${fontName}" could not be confirmed via FontFaceSet:`, e);
-      }
+        const response=await fetch(new URL('fonts/'+spec.file,document.baseURI));
+        if(!response.ok) throw new Error('Font file unavailable');
+        const bytes=await response.arrayBuffer(); info.glyph=glyphChecker(bytes);
+        info.data=await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(new Blob([bytes],{type:'font/ttf'}));});
+      } catch(e) { /* Direct file URLs may block fetch although @font-face loaded. */ }
+      fontCache.set(name,info);
     }
-
-    // SVG Element Factory
-    function createSVGElement(tag, attrs = {}) {
-      const el = document.createElementNS("http://www.w3.org/2000/svg", tag);
-      for (const [key, value] of Object.entries(attrs)) {
-        el.setAttribute(key, value);
-      }
-      return el;
+    const info=fontCache.get(name);
+    if(info.glyph){const unsupported=[...new Set(Array.from(text).filter(c=>!(/\s/u.test(c))&&!info.glyph(c.codePointAt(0))))];if(unsupported.length)throw new Error(`${name} does not contain: ${unsupported.join(' ')}. Choose a font with those characters or adjust the text.`);}
+    return info;
+  }
+  function bounds(text,size,font,spacing) {
+    const key=JSON.stringify([text,size,font,spacing]);if(metrics.has(key))return metrics.get(key);
+    const t=el('text',{'font-family':font,'font-weight':FONTS[font].weight,'font-size':size,'font-stretch':'normal','letter-spacing':round(spacing*size),'font-kerning':'normal','font-variant-ligatures':'none',x:0,y:0,'xml:space':'preserve'},text);
+    measuring.append(t);const b=t.getBBox();t.remove();const value={x:b.x,y:b.y,w:b.width,h:b.height};metrics.set(key,value);return value;
+  }
+  function wrap(text,width,size,font,spacing) {
+    const tokens=text.match(/\S+\s*/gu)||[];let lines=[],line='';
+    for(const token of tokens){const test=line+token;if(bounds(test.trimEnd(),size,font,spacing).w<=width){line=test;}else{if(!line)return null;lines.push(line.trimEnd());line=token;if(bounds(line.trimEnd(),size,font,spacing).w>width)return null;}}
+    if(line)lines.push(line.trimEnd());return lines.length?lines:null;
+  }
+  function fit(text,box,role,font,angle,rng,range) {
+    const sideways=angle===90||angle===270, iw=sideways?box.h:box.w, ih=sideways?box.w:box.h;
+    const spacing=role==='title'?pick(rng,[-.01,0,.01]):.02;
+    const valign=pick(rng,['start','center','end']);
+    const max=range[1],min=range[0];
+    for(let size=max;size>=min;size-=2){
+      const lines=wrap(text,iw,size,font,spacing);if(!lines||lines.length>10)continue;
+      const bs=lines.map(l=>bounds(l,size,font,spacing));
+      // Baselines respect the real glyph heights, including accents.
+      const baselineGap=role==='title'?Math.max(size*.9,...bs.map(b=>b.h+2)):Math.max(size*1.2,...bs.map(b=>b.h+3));
+      if(role==='title'&&lines.length>1&&baselineGap>size*1.5)continue;
+      const ys=[-bs[0].y];for(let i=1;i<bs.length;i++)ys[i]=Math.max(ys[i-1]+baselineGap,ys[i-1]+bs[i-1].y+bs[i-1].h+2-bs[i].y);
+      const height=ys[ys.length-1]+bs[bs.length-1].y+bs[bs.length-1].h;
+      if(height>ih||bs.some(b=>b.w>iw))continue;
+      const offset=valign==='end'?ih-height:valign==='center'?(ih-height)/2:0;
+      return {text,role,box,angle,size,spacing,iw,ih,lines,positions:ys.map((y,i)=>({x:-bs[i].x,y:y+offset})),font};
     }
-
-    // Main procedural layout engine
-    async function renderPoster() {
-      const font = fontSelect.value;
-      await ensureFontReady(font);
-
-      const rng = createRNG(currentSeed);
-      const title = (titleInput.value || "WITNESS").trim().toUpperCase();
-      const location = (locationInput.value || "NYC").trim().toUpperCase();
-      const date = (dateInput.value || "02 04 09").trim().toUpperCase();
-
-      const bg = bgColorPicker.value;
-      const ink = inkColorPicker.value;
-      const allowRotation = toggleRotation.checked;
-      const allowBars = toggleBars.checked;
-      const allowTexture = toggleTexture.checked;
-
-      let chosenFamily = layoutSelect.value;
-      if (chosenFamily === 'auto') {
-        const families = ['split_turn', 'stacked', 'monument', 'offset', 'repetition'];
-        chosenFamily = families[Math.floor(rng() * families.length)];
+    return null;
+  }
+  function halves(text,rng,allowWordSplit=false) {
+    const words=text.split(/\s+/u);
+    if(words.length>1){const at=Math.max(1,Math.min(words.length-1,Math.round(words.length*pick(rng,[.35,.5,.65]))));return [words.slice(0,at).join(' '),words.slice(at).join(' ')];}
+    const gs=graphemes(text);if(allowWordSplit&&gs.length>=5){const at=Math.max(2,Math.min(gs.length-2,Math.round(gs.length*pick(rng,[.35,.5,.65]))));return [gs.slice(0,at).join(''),gs.slice(at).join('')];}return [text];
+  }
+  function plan(s,family,rng) {
+    let body=rect(M,M,920,1320);const blocks=[],bars=[];
+    const hasInfo=!!(s.location||s.date), infoH=hasInfo?pick(rng,[180,220,260,300]):0;
+    const infoTop=hasInfo&&rng()<.4;
+    const barT=s.bars?pick(rng,[10,20,30,40]):0, separator=hasInfo?(s.bars?barT+40:40):0;
+    let infoBox;
+    if(hasInfo){
+      if(infoTop){infoBox=rect(M,M,920,infoH);body=rect(M,M+infoH+separator,920,1320-infoH-separator);}
+      else{infoBox=rect(M,H-M-infoH,920,infoH);body.h-=infoH+separator;}
+      if(s.bars){const y=infoTop?M+infoH+20:body.y+body.h+20;
+        if(rng()<.35){const c=pick(rng,[2,3,4]);bars.push(rect(M,y,span(c),barT),rect(col(c),y,span(6-c),barT));}
+        else{const n=pick(rng,[3,4,6]),start=pick(rng,[0,6-n]);bars.push(rect(col(start),y,span(n),barT));}
       }
-
-      // Root SVG with exact namespace
-      const svg = createSVGElement("svg", {
-        "xmlns": "http://www.w3.org/2000/svg",
-        "viewBox": `0 0 ${CANVAS_W} ${CANVAS_H}`,
-        "width": CANVAS_W,
-        "height": CANVAS_H
-      });
-
-      // SVG Definitions (filter textures, patterns)
-      const defs = createSVGElement("defs");
-      if (allowTexture) {
-        const filter = createSVGElement("filter", { id: "paper-grain" });
-        const feTurbulence = createSVGElement("feTurbulence", {
-          type: "fractalNoise",
-          baseFrequency: "0.04",
-          numOctaves: "3",
-          result: "noise"
-        });
-        const feColorMatrix = createSVGElement("feColorMatrix", {
-          type: "matrix",
-          values: "0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.08 0"
-        });
-        filter.appendChild(feTurbulence);
-        filter.appendChild(feColorMatrix);
-        defs.appendChild(filter);
-      }
-      svg.appendChild(defs);
-
-      // Background Group
-      const bgGroup = createSVGElement("g", { id: "background" });
-      const bgRect = createSVGElement("rect", {
-        x: 0,
-        y: 0,
-        width: CANVAS_W,
-        height: CANVAS_H,
-        fill: bg
-      });
-      bgGroup.appendChild(bgRect);
-
-      // 1u Outer Border (as inspired by WITNESS original)
-      const borderFrame = createSVGElement("rect", {
-        x: MARGIN - 15,
-        y: MARGIN - 15,
-        width: USABLE_W + 30,
-        height: USABLE_H + 30,
-        fill: "none",
-        stroke: ink,
-        "stroke-width": 2,
-        opacity: "0.15"
-      });
-      bgGroup.appendChild(borderFrame);
-      svg.appendChild(bgGroup);
-
-      // Graphic & Structural Bars Group
-      const barsGroup = createSVGElement("g", { id: "structural-bars" });
-      // Typography Group
-      const typeGroup = createSVGElement("g", { id: "typography" });
-
-      // Layout Generators
-      switch (chosenFamily) {
-        case 'split_turn':
-          renderSplitTurn(typeGroup, barsGroup, { title, location, date, font, ink, allowRotation, allowBars, rng });
-          break;
-        case 'stacked':
-          renderStackedImpact(typeGroup, barsGroup, { title, location, date, font, ink, allowRotation, allowBars, rng });
-          break;
-        case 'monument':
-          renderSingleWordMonument(typeGroup, barsGroup, { title, location, date, font, ink, allowRotation, allowBars, rng });
-          break;
-        case 'offset':
-          renderOffsetColumns(typeGroup, barsGroup, { title, location, date, font, ink, allowRotation, allowBars, rng });
-          break;
-        case 'repetition':
-          renderRhythmicRepetition(typeGroup, barsGroup, { title, location, date, font, ink, allowRotation, allowBars, rng });
-          break;
-      }
-
-      svg.appendChild(barsGroup);
-      svg.appendChild(typeGroup);
-
-      // Folds and Texture Overlay
-      if (allowTexture) {
-        const textureGroup = createSVGElement("g", { id: "texture-folds" });
-        renderDynamicFolds(textureGroup, rng);
-        svg.appendChild(textureGroup);
-      }
-
-      posterContainer.innerHTML = '';
-      posterContainer.appendChild(svg);
+      const columns=s.location&&s.date&&rng()<.5;
+      if(columns){const c=pick(rng,[3,4]);blocks.push({text:s.location,role:'location',box:rect(M,infoBox.y,span(c),infoH),angle:0});blocks.push({text:s.date,role:'date',box:rect(col(c),infoBox.y,span(6-c),infoH),angle:0});}
+      else if(s.location&&s.date){const locationH=infoH-70;blocks.push({text:s.location,role:'location',box:rect(M,infoBox.y,920,locationH),angle:0});blocks.push({text:s.date,role:'date',box:rect(M,infoBox.y+locationH+20,920,50),angle:0});}
+      else blocks.push({text:s.location||s.date,role:s.location?'location':'date',box:infoBox,angle:0});
     }
-
-    // Helper: Split title meaningfully
-    function splitTitleInTwo(title) {
-      if (title.length <= 4) return [title, ''];
-      const words = title.split(' ');
-      if (words.length > 1) {
-        const mid = Math.ceil(words.length / 2);
-        return [words.slice(0, mid).join(' '), words.slice(mid).join(' ')];
-      }
-      const half = Math.ceil(title.length / 2);
-      return [title.slice(0, half), title.slice(half)];
+    if(s.bars&&bars.length<3){
+      const atTop=rng()<.5,t=pick(rng,[10,20,30,40]),n=pick(rng,[2,3,4,6]),start=pick(rng,[0,6-n]);
+      const y=atTop?body.y:body.y+body.h-t;bars.push(rect(col(start),y,span(n),t));
+      if(atTop)body.y+=t+20;body.h-=t+20;
     }
+    const title=s.title.toUpperCase();
+    const max=pick(rng,[260,300,340,380,400]);
+    const add=(text,box,angle=0,limit=max,role='title')=>blocks.push({text,box,angle,limit,role});
+    const rotation=(sideways=false)=>s.rotation?pick(rng,sideways?[0,90,180,270]:[0,180]):0;
+    if(family==='split'){
+      const parts=halves(title,rng,true);
+      if(parts.length===1){const n=pick(rng,[4,6]);add(title,rect(col(pick(rng,[0,6-n])),body.y,span(n),body.h),hasInfo?rotation(true):0);}
+      else if(rng()<.28){const c=pick(rng,[2,3,4]);add(parts[0],rect(M,body.y,span(c),body.h),0);add(parts[1],rect(col(c),body.y,span(6-c),body.h),rotation(true));}
+      else{const ratio=pick(rng,[.35,.4,.45,.55,.6]),h=(body.h-40)*ratio;add(parts[0],rect(M,body.y,920,h),0);add(parts[1],rect(M,body.y+h+40,920,body.h-h-40),rotation());}
+    } else if(family==='offset'){
+      const parts=halves(title,rng);
+      if(parts.length===2&&rng()<.65){const c=pick(rng,[2,3,4]);add(parts[0],rect(M,body.y,span(c),body.h),0);add(parts[1],rect(col(c),body.y,span(6-c),body.h),rotation(true));}
+      else{const n=pick(rng,[3,4]),start=pick(rng,[0,6-n]);add(title,rect(col(start),body.y,span(n),body.h),hasInfo?rotation(true):0);}
+    } else if(family==='monument'){
+      const parts=halves(title,rng);
+      if(parts.length===1){const n=pick(rng,[4,6]);add(title,rect(col(pick(rng,[0,6-n])),body.y,span(n),body.h),hasInfo?rotation(true):0);}
+      else{const words=title.split(/\s+/u),first=rng()<.5;const prominent=first?words.shift():words.pop(),rest=words.join(' '),h=(body.h-40)*pick(rng,[.4,.5,.6]);
+        add(first?prominent:rest,rect(M,body.y,920,h),0,first?400:240);
+        add(first?rest:prominent,rect(M,body.y+h+40,920,body.h-h-40),rotation(),first?240:400);}
+    } else if(family==='repetition'){
+      const count=pick(rng,[1,2]),copyH=pick(rng,[90,130,170]),copySpace=count*(copyH+30),copiesTop=rng()<.5;
+      const hero=rect(M,body.y+(copiesTop?copySpace:0),920,body.h-copySpace);add(title,hero,0,max);
+      for(let i=0;i<count;i++){const y=copiesTop?body.y+i*(copyH+30):body.y+body.h-copySpace+30+i*(copyH+30);add(title,rect(M,y,920,copyH),rotation(),pick(rng,[100,120,140]),'repeat');}
+    } else {
+      const parts=halves(title,rng);
+      if(parts.length===2&&rng()<.65){const ratio=pick(rng,[.35,.4,.45,.6]),h=(body.h-40)*ratio;add(parts[0],rect(M,body.y,920,h),0);add(parts[1],rect(M,body.y+h+40,920,body.h-h-40),rotation());}
+      else{const n=pick(rng,[4,6]);add(title,rect(col(pick(rng,[0,6-n])),body.y,span(n),body.h),hasInfo?rotation():0);}
+    }
+    return {family,blocks,bars};
+  }
+  function build(s,p,rng,selectedSeed,fontInfo) {
+    const fitted=[];
+    for(const b of p.blocks.filter(b=>b.role==='title')){const f=fit(b.text,b.box,b.role,s.font,b.angle,rng,[160,b.limit]);if(!f)return null;fitted.push(f);}
+    const titleMin=Math.min(...fitted.map(f=>f.size)),locationMax=Math.min(100,Math.floor(titleMin/3));
+    for(const b of p.blocks.filter(b=>b.role==='location')){const f=fit(b.text,b.box,b.role,s.font,0,rng,[40,locationMax]);if(!f)return null;fitted.push(f);}
+    const locationSize=fitted.find(f=>f.role==='location')?.size;
+    const dateMax=locationSize?Math.min(40,Math.floor(locationSize/1.5)):40;
+    for(const b of p.blocks.filter(b=>b.role==='date'||b.role==='repeat')){const range=b.role==='repeat'?[80,Math.min(b.limit,Math.floor(titleMin*.65))]:[24,dateMax];const f=fit(b.text,b.box,b.role,s.font,b.angle,rng,range);if(!f)return null;fitted.push(f);}
+    if(!fitted.some(f=>f.angle===0&&f.role!=='repeat'))return null;
+    const svg=root();
+    svg.setAttribute('role','img');svg.setAttribute('aria-label',`${s.title}${s.location?', '+s.location:''}${s.date?', '+s.date:''}`);
+    svg.append(el('title',{},`${s.title} — ${NAMES[p.family]}`));
+    svg.append(el('desc',{},'Procedural typography. Text remains editable; install the selected font in Illustrator.'));
+    // The same embedded font travels with preview and download for standalone
+    // browser viewing. Illustrator still needs the matching desktop font.
+    if(fontInfo.data){const defs=el('defs');defs.append(el('style',{type:'text/css'},`@font-face{font-family:"${s.font}";src:url("${fontInfo.data}") format("truetype");font-weight:${s.font==='Oswald'?'200 700':'400'};font-style:normal}`));svg.append(defs);}
 
-    // Layout 1: Split and Turn (WITNESS Signature)
-    function renderSplitTurn
+    const metadata={version:1,seed:selectedSeed,settings:{...s},family:p.family,fontFile:FONTS[s.font].file,blocks:fitted.map(f=>({role:f.role,text:f.text,size:f.size,angle:f.angle,box:f.box,lines:f.lines})),bars:p.bars};
+    svg.append(el('metadata',{id:'composition'},JSON.stringify(metadata)));
+    const background=el('g',{id:'background'});background.append(el('rect',{x:0,y:0,width:W,height:H,fill:s.bg}));svg.append(background);
+    const frame=el('g',{id:'border'});frame.append(el('rect',{x:5,y:5,width:990,height:1390,fill:'none',stroke:'#F5F1E7','stroke-width':10}));svg.append(frame);
+    const bars=el('g',{id:'structural-bars',fill:s.ink});for(const b of p.bars)bars.append(el('rect',{x:b.x,y:b.y,width:b.w,height:b.h}));svg.append(bars);
+    const titles=el('g',{id:'headline'}),info=el('g',{id:'event-information'}),copies=el('g',{id:'repeated-lettering'});
+    for(let i=0;i<fitted.length;i++){
+      const f=fitted[i],b=f.box,g=el('g',{'data-role':f.role,'data-block':i,transform:`translate(${round(b.x+b.w/2)} ${round(b.y+b.h/2)}) rotate(${f.angle}) translate(${round(-f.iw/2)} ${round(-f.ih/2)})`});
+      for(let j=0;j<f.lines.length;j++)g.append(el('text',{x:round(f.positions[j].x),y:round(f.positions[j].y),fill:s.ink,'font-family':s.font,'font-weight':FONTS[s.font].weight,'font-size':f.size,'font-stretch':'normal','font-style':'normal','letter-spacing':round(f.spacing*f.size),'font-kerning':'normal','font-variant-ligatures':'none','xml:space':'preserve'},f.lines[j]));
+      (f.role==='title'?titles:f.role==='repeat'?copies:info).append(g);
+    }
+    svg.append(titles,info,copies);
+    if(s.texture){const texture=el('g',{id:'paper-texture','pointer-events':'none'});
+      // Vector grain and independently selected folds; no raster filters or fixed panels.
+      for(let i=0;i<650;i++)texture.append(el('rect',{x:round(12+rng()*976),y:round(12+rng()*1376),width:round(.5+rng()*1.8),height:round(.5+rng()*2.5),fill:s.ink,opacity:.04}));
+      const folds=pick(rng,[1,2,3]);let vertical=false;
+      for(let i=0;i<folds;i++){const v=!vertical&&rng()<.5;vertical||=v;const at=round((v?W:H)*(.18+rng()*.64));texture.append(el('rect',{x:v?at:10,y:v?10:at,width:v?3:980,height:v?1380:3,fill:s.ink,opacity:.05}));texture.append(el('rect',{x:v?at+3:10,y:v?10:at+3,width:v?2:980,height:v?1380:2,fill:'#F5F1E7',opacity:.06}));}
+      svg.append(texture);
+    }
+    return {svg,metadata,fitted,bars:p.bars,seed:selectedSeed,settings:s};
+  }
+  function transformedBounds(node,svg) {
+    const b=node.getBBox(),m=svg.getCTM().inverse().multiply(node.getCTM());
+    const pts=[[b.x,b.y],[b.x+b.width,b.y],[b.x,b.y+b.height],[b.x+b.width,b.y+b.height]].map(([x,y])=>({x:m.a*x+m.c*y+m.e,y:m.b*x+m.d*y+m.f}));
+    const x=Math.min(...pts.map(p=>p.x)),y=Math.min(...pts.map(p=>p.y));return {x,y,w:Math.max(...pts.map(p=>p.x))-x,h:Math.max(...pts.map(p=>p.y))-y};
+  }
+  function intersects(a,b,gap=0) {const e=.1;return a.x+a.w+gap>b.x+e&&b.x+b.w+gap>a.x+e&&a.y+a.h+gap>b.y+e&&b.y+b.h+gap>a.y+e;}
+  function validate(candidate) {
+    const svg=candidate.svg;$('measurement').append(svg);
+    try{
+      const texts=[...svg.querySelectorAll('text')];const bs=texts.map(t=>({box:transformedBounds(t,svg),block:t.parentElement.getAttribute('data-block'),role:t.parentElement.getAttribute('data-role')}));
+      for(let i=0;i<bs.length;i++){const b=bs[i].box;if(![b.x,b.y,b.w,b.h].every(Number.isFinite)||b.w<=0||b.x<M-.1||b.y<M-.1||b.x+b.w>W-M+.1||b.y+b.h>H-M+.1)return false;
+        for(let j=0;j<i;j++)if(intersects(b,bs[j].box,bs[i].block===bs[j].block?0:20))return false;
+        for(const bar of candidate.bars)if(intersects(b,bar,20))return false;
+      }
+      const displayTitle=candidate.fitted.filter(f=>f.role==='title').map(f=>f.text).join('');
+      if(displayTitle.replace(/\s/gu,'')!==candidate.settings.title.toUpperCase().replace(/\s/gu,''))return false;
+      for(const role of ['location','date']){const f=candidate.fitted.find(f=>f.role===role);if(candidate.settings[role]&&(!f||f.text!==candidate.settings[role]))return false;}
+      candidate.geometry=bs.filter(b=>b.role==='title').map(b=>b.box);return true;
+    } finally {svg.remove();}
+  }
+  function different(a,b) {
+    if(!a)return true;
+    const fa=a.fitted.filter(f=>f.role==='title'),fb=b.fitted.filter(f=>f.role==='title');let changes=0;
+    if(a.metadata.family!==b.metadata.family)changes++;
+    if(fa.map(f=>f.lines.join('|')).join('/')!==fb.map(f=>f.lines.join('|')).join('/'))changes++;
+    if(fa.map(f=>f.angle).join()!==fb.map(f=>f.angle).join())changes++;
+    const ia=a.fitted.filter(f=>f.role==='location'||f.role==='date'),ib=b.fitted.filter(f=>f.role==='location'||f.role==='date');
+    // Moving or redividing the information band is a structural choice too.
+    if(ia.length!==ib.length||ia.some((f,i)=>!ib[i]||Math.abs(f.box.y-ib[i].box.y)>80||Math.abs(f.box.w-ib[i].box.w)>120||Math.abs(f.box.h-ib[i].box.h)>60||f.lines.length!==ib[i].lines.length))changes++;
+    const box=g=>({x:Math.min(...g.map(r=>r.x)),y:Math.min(...g.map(r=>r.y)),right:Math.max(...g.map(r=>r.x+r.w)),bottom:Math.max(...g.map(r=>r.y+r.h))});
+    const ga=box(a.geometry),gb=box(b.geometry);
+    if(Math.abs((ga.x+ga.right-gb.x-gb.right)/2)>90||Math.abs((ga.y+ga.bottom-gb.y-gb.bottom)/2)>100)changes++;
+    if(Math.abs(Math.max(...fa.map(f=>f.size))/Math.max(...fb.map(f=>f.size))-1)>.12)changes++;
+    if(a.bars.length!==b.bars.length||a.bars.some((r,i)=>!b.bars[i]||Math.abs(r.y-b.bars[i].y)>100||Math.abs(r.w-b.bars[i].w)>120))changes++;
+    return changes>=2;
+  }
+  async function generate() {
+    if(busy)return;const s=settings();
+    if(!s.title){message('Enter a title before generating.',true);$('title-input').focus();return;}
+    if(contrast(s.bg,s.ink)<4.5){message('Choose background and text colors with stronger contrast. Your current poster is kept.',true);return;}
+    busy=true;$('generate').disabled=true;$('controls').setAttribute('aria-busy','true');message(`Loading ${s.font} and fitting your words…`);
+    try {
+      const fontInfo=await fontReady(s.font,s.title.toUpperCase()+s.location+s.date);
+      const families=s.layout==='auto'?Object.keys(NAMES):[s.layout];let candidate=null,validFound=false;
+      for(let attempt=0;attempt<100;attempt++){
+        const n=seed(),rng=rngFrom(n),family=pick(rng,families),p=plan(s,family,rng);
+        const c=build(s,p,rng,n,fontInfo);if(c&&validate(c)){validFound=true;if(different(last,c)){candidate=c;break;}}
+        if(attempt%8===7)await new Promise(requestAnimationFrame);
+      }
+      if(!candidate)throw new Error(validFound?'These settings limit distinct arrangements. Try Automatic layout or enable rotation or bars; your current poster is kept.':`This text does not fit legibly${s.layout==='auto'?'':' in '+NAMES[s.layout]}. Try Automatic, a shorter title or location, or a different font. Your current poster is kept.`);
+      // Commit only a measured, collision-free candidate. Export never calls generate.
+      last=candidate;$('preview').replaceChildren(candidate.svg);edition++;dirty=JSON.stringify(settings())!==JSON.stringify(s);
+      $('edition').textContent=`No. ${String(edition).padStart(2,'0')} / ${NAMES[candidate.metadata.family]}`;
+      $('download').disabled=false;$('result-note').textContent=`${s.font}${s.font==='Oswald'?' · 700':''} · Editable text + vector shapes · Seed ${candidate.seed}`;
+      message(dirty?'Controls changed during generation. Click Generate to apply them.':`New composition ready.${fontInfo.glyph?'':' Character coverage could not be checked; inspect unfamiliar characters.'}`);
+    } catch(e) {message(e.message||'Could not generate this poster. Your previous preview is kept.',true);}
+    finally{busy=false;$('generate').disabled=false;$('controls').removeAttribute('aria-busy');}
+  }
+  $('controls').addEventListener('submit',e=>{e.preventDefault();generate();});
+  $('controls').addEventListener('input',()=>{
+    $('background-value').textContent=$('background-color').value.toUpperCase();$('text-value').textContent=$('text-color').value.toUpperCase();
+    dirty=true;if(!busy)message('Settings changed. Click Generate to apply them; Download saves the preview shown.');
+  });
+  $('download').addEventListener('click',()=>{
+    if(!last)return;
+    const xml='<?xml version="1.0" encoding="UTF-8"?>\n'+new XMLSerializer().serializeToString(last.svg);
+    const url=URL.createObjectURL(new Blob([xml],{type:'image/svg+xml;charset=utf-8'}));
+    const link=document.createElement('a');link.href=url;link.download=`poster-${last.seed}.svg`;document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+    message(`Downloaded the displayed poster. Install ${last.settings.font}${last.settings.font==='Oswald'?' (weight 700)':''} before checking its editable text in Illustrator.`);
+  });
+  generate();
+})();
+</script>
+</body>
+</html>
