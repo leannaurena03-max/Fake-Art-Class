@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WITNESS NYC — Generative Poster Studio</title>
+  
+  <!-- Fallback Google Fonts for testing in browser if local files are loading -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=League+Gothic&family=Oswald:wght@700&display=swap" rel="stylesheet">
+
+  <style>
+    /* Local font declarations matching skills.md relative paths */
+    @font-face {
+      font-family: 'Anton';
+      src: url('fonts/Anton-Regular.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Oswald';
+      src: url('fonts/Oswald-VariableFont_wght.ttf') format('truetype-variations'),
+           url('fonts/Oswald-VariableFont_wght.ttf') format('truetype');
+      font-weight: 200 900;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Bebas Neue';
+      src: url('fonts/BebasNeue-Regular.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'League Gothic';
+      src: url('fonts/LeagueGothic-Regular-VariableFont_wdth.ttf') format('truetype-variations'),
+           url('fonts/LeagueGothic-Regular-VariableFont_wdth.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    :root {
+      --bg-workspace: #161618;
+      --panel-bg: #212124;
+      --panel-border: #333336;
+      --text-main: #f0f0f2;
+      --text-muted: #9c9ca4;
+      --accent: #f1dc45;
+      --accent-hover: #fae868;
+      --radius: 6px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-workspace);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      padding: 16px 28px;
+      border-bottom: 1px solid var(--panel-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #1a1a1c;
+    }
+
+    header h1 {
+      font-size: 1.15rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    header h1 span {
+      background: var(--accent);
+      color: #111;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 800;
+    }
+
+    .app-layout {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      min-height: calc(100vh - 65px);
+    }
+
+    /* Left Control Sidebar */
+    .sidebar {
+      background-color: var(--panel-bg);
+      border-right: 1px solid var(--panel-border);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      overflow-y: auto;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+    }
+
+    input[type="text"],
+    select {
+      background: #151517;
+      border: 1px solid var(--panel-border);
+      color: var(--text-main);
+      padding: 10px 12px;
+      border-radius: var(--radius);
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.15s ease;
+    }
+
+    input[type="text"]:focus,
+    select:focus {
+      border-color: var(--accent);
+    }
+
+    .color-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .color-field {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #151517;
+      border: 1px solid var(--panel-border);
+      padding: 6px 10px;
+      border-radius: var(--radius);
+    }
+
+    .color-field input[type="color"] {
+      -webkit-appearance: none;
+      border: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 4px;
+      cursor: pointer;
+      background: none;
+    }
+
+    .color-field input[type="color"]::-webkit-color-swatch-wrapper {
+      padding: 0;
+    }
+
+    .color-field input[type="color"]::-webkit-color-swatch {
+      border: 1px solid #444;
+      border-radius: 4px;
+    }
+
+    .color-field span {
+      font-size: 0.82rem;
+      color: var(--text-main);
+    }
+
+    .toggle-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 12px 14px;
+      background: #17171a;
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius);
+    }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .toggle-row span {
+      font-size: 0.86rem;
+      color: var(--text-main);
+    }
+
+    .toggle-row input[type="checkbox"] {
+      accent-color: var(--accent);
+      width: 17px;
+      height: 17px;
+      cursor: pointer;
+    }
+
+    button#generate-btn {
+      margin-top: 8px;
+      background-color: var(--accent);
+      color: #111111;
+      border: none;
+      padding: 14px 16px;
+      border-radius: var(--radius);
+      font-size: 1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background-color 0.15s ease, transform 0.05s ease;
+    }
+
+    button#generate-btn:hover {
+      background-color: var(--accent-hover);
+    }
+
+    button#generate-btn:active {
+      transform: scale(0.99);
+    }
+
+    /* Right Preview Stage */
+    .preview-stage {
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at center, #26262a 0%, #131315 100%);
+      overflow: hidden;
+    }
+
+    .poster-container {
+      width: 100%;
+      max-width: 580px;
+      height: auto;
+      max-height: 80vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65), 0 2px 10px rgba(0, 0, 0, 0.4);
+      border-radius: 4px;
+      overflow: hidden;
+      background: #111;
+      aspect-ratio: 5 / 7;
+    }
+
+    .poster-container svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .download-wrapper {
+      margin-top: 22px;
+    }
+
+    button#download-btn {
+      background-color: #2b2b30;
+      color: var(--text-main);
+      border: 1px solid var(--panel-border);
+      padding: 12px 28px;
+      border-radius: var(--radius);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: background-color 0.15s ease, border-color 0.15s ease;
+    }
+
+    button#download-btn:hover {
+      background-color: #38383f;
+      border-color: #555;
+    }
+
+    button#download-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+
+    @media (max-width: 900px) {
+      .app-layout {
+        grid-template-columns: 1fr;
+      }
+      .sidebar {
+        border-right: none;
+        border-bottom: 1px solid var(--panel-border);
+      }
+      .preview-stage {
+        padding: 24px 16px;
+      }
+      .poster-container {
+        max-width: 92vw;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>WITNESS NYC <span>STUDIO</span></h1>
+    <div style="font-size: 0.85rem; color: var(--text-muted);">Procedural Design System (5:7 Ratio)</div>
+  </header>
+
+  <main class="app-layout">
+    <!-- Controls (Left) -->
+    <aside class="sidebar">
+      <div class="form-group">
+        <label for="title-input">Title / Headline</label>
+        <input type="text" id="title-input" value="WITNESS" placeholder="Enter headline">
+      </div>
+
+      <div class="form-group">
+        <label for="location-input">Location / Subhead</label>
+        <input type="text" id="location-input" value="NYC" placeholder="Enter location">
+      </div>
+
+      <div class="form-group">
+        <label for="date-input">Date / Supporting Info</label>
+        <input type="text" id="date-input" value="02 04 09" placeholder="Enter date or details">
+      </div>
+
+      <div class="form-group">
+        <label for="font-select">Typography</label>
+        <select id="font-select">
+          <option value="Anton">Anton (Regular)</option>
+          <option value="Oswald">Oswald (Bold 700)</option>
+          <option value="Bebas Neue">Bebas Neue (Regular)</option>
+          <option value="League Gothic">League Gothic (Regular)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="layout-select">Layout Composition</label>
+        <select id="layout-select">
+          <option value="auto">Automatic (Random Variation)</option>
+          <option value="split_turn">Split & Turn (Witness Signature)</option>
+          <option value="stacked">Stacked Impact</option>
+          <option value="monument">Single-Word Monument</option>
+          <option value="offset">Offset Columns</option>
+          <option value="repetition">Rhythmic Repetition</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="palette-select">Color Preset</label>
+        <select id="palette-select">
+          <option value="witness">WITNESS (Yellow & Black)</option>
+          <option value="inverted">Inverted (Black & Off-White)</option>
+          <option value="poster-red">Editorial (Warm Cream & Crimson)</option>
+          <option value="concrete">Brutalist (Concrete Grey & Black)</option>
+          <option value="custom">Custom Colors</option>
+        </select>
+      </div>
+
+      <div class="color-grid" id="custom-color-controls">
+        <div class="color-field">
+          <input type="color" id="bg-color-picker" value="#F1DC45">
+          <span>Background</span>
+        </div>
+        <div class="color-field">
+          <input type="color" id="ink-color-picker" value="#111111">
+          <span>Ink Color</span>
+        </div>
+      </div>
+
+      <div class="toggle-group">
+        <label class="toggle-row">
+          <span>Rotated Lettering</span>
+          <input type="checkbox" id="toggle-rotation" checked>
+        </label>
+        <label class="toggle-row">
+          <span>Structural Bars</span>
+          <input type="checkbox" id="toggle-bars" checked>
+        </label>
+        <label class="toggle-row">
+          <span>Paper Texture & Fold Marks</span>
+          <input type="checkbox" id="toggle-texture">
+        </label>
+      </div>
+
+      <button type="button" id="generate-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+        </svg>
+        Generate Poster
+      </button>
+    </aside>
+
+    <!-- Poster Preview (Right) -->
+    <section class="preview-stage">
+      <div class="poster-container" id="poster-container">
+        <!-- SVG injected dynamically -->
+      </div>
+
+      <div class="download-wrapper">
+        <button type="button" id="download-btn">
+          <svg viewBox="0 0 24 24">
+            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+          </svg>
+          Download Editable SVG
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // System Constants based on skills.md
+    const CANVAS_W = 1000;
+    const CANVAS_H = 1400;
+    const U = 10; // 1u = 10 units
+    const MARGIN = 40; // 4u margin
+    const USABLE_W = CANVAS_W - (MARGIN * 2); // 920 units
+    const USABLE_H = CANVAS_H - (MARGIN * 2); // 1320 units
+    const GUTTER = 20; // 2u gutter
+    const COL_W = (USABLE_W - (5 * GUTTER)) / 6; // ~136.67 units
+
+    // State management
+    let currentSeed = Math.floor(Math.random() * 100000);
+
+    const PALETTES = {
+      witness: { bg: '#F1DC45', ink: '#111111', accent: '#F5F1E7' },
+      inverted: { bg: '#111111', ink: '#F5F1E7', accent: '#F1DC45' },
+      'poster-red': { bg: '#EFE9DD', ink: '#D7261E', accent: '#111111' },
+      concrete: { bg: '#CBCBC9', ink: '#121212', accent: '#FFFFFF' },
+    };
+
+    // UI Elements
+    const titleInput = document.getElementById('title-input');
+    const locationInput = document.getElementById('location-input');
+    const dateInput = document.getElementById('date-input');
+    const fontSelect = document.getElementById('font-select');
+    const layoutSelect = document.getElementById('layout-select');
+    const paletteSelect = document.getElementById('palette-select');
+    const bgColorPicker = document.getElementById('bg-color-picker');
+    const inkColorPicker = document.getElementById('ink-color-picker');
+    const toggleRotation = document.getElementById('toggle-rotation');
+    const toggleBars = document.getElementById('toggle-bars');
+    const toggleTexture = document.getElementById('toggle-texture');
+    const generateBtn = document.getElementById('generate-btn');
+    const downloadBtn = document.getElementById('download-btn');
+    const posterContainer = document.getElementById('poster-container');
+
+    // Pseudo-random number generator for reproducible generation per seed
+    function sfc32(a, b, c, d) {
+      return function() {
+        a |= 0; b |= 0; c |= 0; d |= 0;
+        let t = (a + b | 0) + d | 0;
+        d = d + 1 | 0;
+        a = b ^ b >>> 9;
+        b = c + (c << 3) | 0;
+        c = c << 21 | c >>> 11;
+        c = c + t | 0;
+        return (t >>> 0) / 4294967296;
+      };
+    }
+
+    function createRNG(seed) {
+      return sfc32(seed, seed ^ 0xDEADBEEF, seed ^ 0x41C64E6D, (seed >>> 16) ^ 0x1234567);
+    }
+
+    // Palette change listener
+    paletteSelect.addEventListener('change', () => {
+      const selected = paletteSelect.value;
+      if (selected !== 'custom') {
+        bgColorPicker.value = PALETTES[selected].bg;
+        inkColorPicker.value = PALETTES[selected].ink;
+      }
+      renderPoster();
+    });
+
+    bgColorPicker.addEventListener('input', () => {
+      paletteSelect.value = 'custom';
+      renderPoster();
+    });
+
+    inkColorPicker.addEventListener('input', () => {
+      paletteSelect.value = 'custom';
+      renderPoster();
+    });
+
+    [titleInput, locationInput, dateInput, fontSelect, layoutSelect, toggleRotation, toggleBars, toggleTexture].forEach(el => {
+      el.addEventListener('change', () => renderPoster());
+    });
+
+    generateBtn.addEventListener('click', () => {
+      currentSeed = Math.floor(Math.random() * 1000000);
+      renderPoster();
+    });
+
+    // Font loading verification
+    async function ensureFontReady(fontName) {
+      try {
+        const weight = fontName === 'Oswald' ? '700' : 'normal';
+        await document.fonts.load(`${weight} 60px "${fontName}"`);
+        await document.fonts.ready;
+      } catch (e) {
+        console.warn(`Font "${fontName}" could not be confirmed via FontFaceSet:`, e);
+      }
+    }
+
+    // SVG Element Factory
+    function createSVGElement(tag, attrs = {}) {
+      const el = document.createElementNS("http://www.w3.org/2000/svg", tag);
+      for (const [key, value] of Object.entries(attrs)) {
+        el.setAttribute(key, value);
+      }
+      return el;
+    }
+
+    // Main procedural layout engine
+    async function renderPoster() {
+      const font = fontSelect.value;
+      await ensureFontReady(font);
+
+      const rng = createRNG(currentSeed);
+      const title = (titleInput.value || "WITNESS").trim().toUpperCase();
+      const location = (locationInput.value || "NYC").trim().toUpperCase();
+      const date = (dateInput.value || "02 04 09").trim().toUpperCase();
+
+      const bg = bgColorPicker.value;
+      const ink = inkColorPicker.value;
+      const allowRotation = toggleRotation.checked;
+      const allowBars = toggleBars.checked;
+      const allowTexture = toggleTexture.checked;
+
+      let chosenFamily = layoutSelect.value;
+      if (chosenFamily === 'auto') {
+        const families = ['split_turn', 'stacked', 'monument', 'offset', 'repetition'];
+        chosenFamily = families[Math.floor(rng() * families.length)];
+      }
+
+      // Root SVG with exact namespace
+      const svg = createSVGElement("svg", {
+        "xmlns": "http://www.w3.org/2000/svg",
+        "viewBox": `0 0 ${CANVAS_W} ${CANVAS_H}`,
+        "width": CANVAS_W,
+        "height": CANVAS_H
+      });
+
+      // SVG Definitions (filter textures, patterns)
+      const defs = createSVGElement("defs");
+      if (allowTexture) {
+        const filter = createSVGElement("filter", { id: "paper-grain" });
+        const feTurbulence = createSVGElement("feTurbulence", {
+          type: "fractalNoise",
+          baseFrequency: "0.04",
+          numOctaves: "3",
+          result: "noise"
+        });
+        const feColorMatrix = createSVGElement("feColorMatrix", {
+          type: "matrix",
+          values: "0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.08 0"
+        });
+        filter.appendChild(feTurbulence);
+        filter.appendChild(feColorMatrix);
+        defs.appendChild(filter);
+      }
+      svg.appendChild(defs);
+
+      // Background Group
+      const bgGroup = createSVGElement("g", { id: "background" });
+      const bgRect = createSVGElement("rect", {
+        x: 0,
+        y: 0,
+        width: CANVAS_W,
+        height: CANVAS_H,
+        fill: bg
+      });
+      bgGroup.appendChild(bgRect);
+
+      // 1u Outer Border (as inspired by WITNESS original)
+      const borderFrame = createSVGElement("rect", {
+        x: MARGIN - 15,
+        y: MARGIN - 15,
+        width: USABLE_W + 30,
+        height: USABLE_H + 30,
+        fill: "none",
+        stroke: ink,
+        "stroke-width": 2,
+        opacity: "0.15"
+      });
+      bgGroup.appendChild(borderFrame);
+      svg.appendChild(bgGroup);
+
+      // Graphic & Structural Bars Group
+      const barsGroup = createSVGElement("g", { id: "structural-bars" });
+      // Typography Group
+      const typeGroup = createSVGElement("g", { id: "typography" });
+
+      // Layout Generators
+      switch (chosenFamily) {
+        case 'split_turn':
+          renderSplitTurn(typeGroup, barsGroup, { title, location, date, font, ink, allowRotation, allowBars, rng });
+          break;
+        case 'stacked':
+          renderStackedImpact(typeGroup, barsGroup, { title, location, date, font, ink, allowRotation, allowBars, rng });
+          break;
+        case 'monument':
+          renderSingleWordMonument(typeGroup, barsGroup, { title, location, date, font, ink, allowRotation, allowBars, rng });
+          break;
+        case 'offset':
+          renderOffsetColumns(typeGroup, barsGroup, { title, location, date, font, ink, allowRotation, allowBars, rng });
+          break;
+        case 'repetition':
+          renderRhythmicRepetition(typeGroup, barsGroup, { title, location, date, font, ink, allowRotation, allowBars, rng });
+          break;
+      }
+
+      svg.appendChild(barsGroup);
+      svg.appendChild(typeGroup);
+
+      // Folds and Texture Overlay
+      if (allowTexture) {
+        const textureGroup = createSVGElement("g", { id: "texture-folds" });
+        renderDynamicFolds(textureGroup, rng);
+        svg.appendChild(textureGroup);
+      }
+
+      posterContainer.innerHTML = '';
+      posterContainer.appendChild(svg);
+    }
+
+    // Helper: Split title meaningfully
+    function splitTitleInTwo(title) {
+      if (title.length <= 4) return [title, ''];
+      const words = title.split(' ');
+      if (words.length > 1) {
+        const mid = Math.ceil(words.length / 2);
+        return [words.slice(0, mid).join(' '), words.slice(mid).join(' ')];
+      }
+      const half = Math.ceil(title.length / 2);
+      return [title.slice(0, half), title.slice(half)];
+    }
+
+    // Layout 1: Split and Turn (WITNESS Signature)
+    function renderSplitTurn
