@@ -1,17 +1,77 @@
-	1	Follow this guide every time you build or edit my page. Create a one-page class homepage with my name, a hero image, and an organized index of links to my assignments.
-	2	Use these website references:
-	◦	Site 1: Apple. What I like about it: the clear sections, simple wording, and focus on images. Use these ideas to keep my page clean and easy to scan.
-	◦	Site 2: Nike. What I like about it: the strong imagery and short, direct calls to action. Give my hero image prominence and make assignment links easy to spot.
-	◦	Additional reference: Adidas. Use it as inspiration for a sporty, structured direction, expressed through square buttons and consistent alignment.
-	3	Keep headings small. Use "Helvetica Neue", Helvetica, Arial, sans-serif for headings, with a weight of 700. Set my name, the main heading, to 24px on laptops and 22px on phones. Set section headings to 18px. Use a heading line height of 1.25.
-	4	Use readable body typography. Use Arial, Helvetica, sans-serif for body text. Set body text to 16px, weight 400, and line height 1.5. Use 16px and weight 700 for assignment links.
-	5	Keep my exact colours. Set the background to #FFFFFF, text to #111111, and accent to #2E9B4F. Use the accent for links, borders, button fills, and floating background shapes. Use #111111 text inside green buttons.
-	6	Set up a responsive assignment grid. Use three equal columns on laptops at widths of 1024px and above, two columns on tablets from 640px to 1023px, and one column on phones below 640px. Keep assignments in their original order.
-	7	Use consistent spacing. Center the content within a maximum width of 1200px. Add horizontal page padding of 32px on laptops, 24px on tablets, and 16px on phones. Use 24px grid gaps on laptops and tablets and 16px on phones. Separate major sections by 48px on laptops and 32px on phones.
-	8	Place my name at the top left, above the hero image. Display “Leanna Urena” as the page’s single h1. Align it with the hero image and assignment grid. Leave 24px between my name and the image.
-	9	Run the hero image across the full content width. Make it span all columns, with square corners. Use a 16 / 7 aspect ratio on laptops and tablets and 4 / 3 on phones. Apply width: 100%, display: block, and object-fit: cover. Keep the main subject visible and include descriptive alt text.
-	10	Make work-list links filled buttons with square corners. Use actual <a> elements with assignment URLs. Give each link a #2E9B4F background, a 1px solid #2E9B4F border, and border-radius: 0. Make each button fill its grid cell, with a minimum height of 56px and padding of 16px 20px. Left-align the label and allow longer titles to wrap.
-	11	Underline links on hover. Underline the button’s text using a 2px underline with a 4px offset. Apply the same underline on keyboard focus, plus a 2px solid #111111 outline with a 3px offset. Keep button dimensions stable during interaction.
-	12	Create a moving background of shapes floating up at a fast speed. Use green circles and squares sized between 20px and 64px, with opacity between 0.06 and 0.12. Show 12 shapes on laptops, eight on tablets, and six on phones. Animate each shape from below the viewport to above it over 4–6 seconds, using linear timing, infinite repetition, and staggered negative delays.
-	13	Keep the animation behind the content. Give the decorative layer pointer-events: none, aria-hidden="true", and clipped overflow. Keep text and controls above it. Include a small “Pause animation” control, and disable movement when prefers-reduced-motion: reduce is enabled.
-	14	Keep future edits consistent. Reuse these fonts, colours, spacing, breakpoints, button styles, and animation settings whenever you add assignments or update the page.
+# Poster Generator — Project Handoff
+
+**Student:** Leanna Urena  
+**Class:** A.I. for Designers  
+**Last updated:** October 12, 2026  
+**Current stage:** Session 1 — research, design rules, and interface planning
+
+## Project goal
+
+Create a poster generator inspired by my chosen WITNESS NYC poster. It should make new, visually different posters using the original poster’s bold typography, strong contrast, structured spacing, and unexpected rotation. Each generation should offer a new composition while keeping the text I entered.
+
+Use `skills.md` for the design rules. Use this file to understand the project’s progress, decisions, and next steps.
+
+## Reference and visual direction
+
+The reference file is `hort-nke-lebron-witness-campaign.jpg`.
+
+My analysis describes large, heavy black sans-serif letters on a yellow background. “WIT” is at the top, a smaller “NYC” is in the middle, and “NESS” is upside down below. Black bars divide the layout. The open space around the smaller text balances the large lettering, and the border and creases give it a printed-paper feeling.
+
+The qualities I want to carry into the generator are boldness, energy, dramatic size differences, and typography acting as the main image. New posters do not need to repeat the exact WITNESS layout or include the Nike logo.
+
+## What is done
+
+- Chosen the WITNESS NYC reference poster.
+- Written a personal analysis of its type, hierarchy, layout, color, spacing, and texture.
+- Created a `skills.md` draft for a generative design system. The latest supplied copy is named `skills(2).md`.
+- Identified Anton as the first font candidate, with Oswald Bold, Bebas Neue, and League Gothic as alternatives.
+- Drawn and revised an initial interface sketch with content fields, a poster preview, and a download control.
+
+The latest sketch image could not be visually checked in the last review. Confirm that it has one shared Generate button before treating that revision as final.
+
+## Interface plan
+
+Keep the first version simple:
+
+- **Left side:** Title, Location, and Date fields, followed by one Generate button for the whole poster.
+- **Right side:** A large Poster Preview with a Download button underneath.
+- **Generate:** Keep the entered text and produce a new composition using the design rules.
+- **Download:** Save the poster currently shown in the preview.
+
+The interface can say “Title”; this is the “headline” described in `skills.md`. More detailed controls for color, rotation, bars, and texture can come later.
+
+## Decisions and open items
+
+- Start with a portrait poster and yellow-and-black styling, while allowing other high-contrast palettes later.
+- Use heavy condensed type, clear hierarchy, structural bars, and controlled rotation.
+- Anton is a candidate, not a confirmed or downloaded font. Compare it with the reference before making the final choice.
+- The design rules still need specific grid, spacing, and type-size measurements. Earlier suggestions of a six-column grid, 4% margins, a 1% spacing unit, and an 8:2:1 type-size ratio are proposals to test, not measured facts about the reference.
+- The current `skills.md` proposes SVG artwork and editable export. These features have not been built or tested.
+- References in `skills.md` to a later Tonhalle test, a single HTML page, and GitHub Pages requirements need to be checked against the later assignment instructions.
+
+## Files and organization
+
+| File | Status |
+| --- | --- |
+| `hort-nke-lebron-witness-campaign.jpg` | Reference supplied |
+| `quick poster descrip..txt` | Written analysis supplied |
+| `skills(2).md` | Latest supplied design-rules draft; intended project filename is `skills.md` |
+| `handoff.md` | This progress record |
+| `app-sketch.png` | Suggested filename for the final sketch; saving under this name is not confirmed |
+| `fonts/` | Planned folder for the selected font and its license |
+
+The local class-folder structure and GitHub uploads have not been confirmed. Do not assume those steps are complete.
+
+## Next steps
+
+1. Confirm that the sketch has one Generate button and save it as `app-sketch.png` in the class folder.
+2. Compare Anton with the reference, choose a font, and save the font files and license in `fonts/`.
+3. Finalize measurable grid, spacing, and hierarchy rules in `skills.md`.
+4. Organize the reference, analysis, sketch, fonts, and both Markdown files. Confirm that the reference poster is uploaded to GitHub as required.
+5. When the class reaches the building stage, use these materials to build and test the first generator.
+
+## Instructions for the next AI session
+
+Read this file, the current `skills.md`, the reference poster, and the sketch before continuing. Explain one manageable step at a time in simple language. Keep the generator flexible enough to create new compositions. Update this handoff as work is completed, and distinguish planned features from working features.
+
+No working generator, verified export, or published generator site has been confirmed yet.
